@@ -9,16 +9,16 @@
 
 #   SETTINGS
 #------------------------------------------------------------------------------
-DIR='/usr/bin/'			        # Path to dzen
-BARBG='#616161'					# bg color gdbar
-BARFG='#990000'					# fg color gdbar
-BARH=8							# Height of gdbar
-BARW=50							# Width of gdbar
+DIR='/usr/bin/'                 # Path to dzen
+BARBG='#616161'                 # bg color gdbar
+BARFG='#990000'                 # fg color gdbar
+BARH=8                          # Height of gdbar
+BARW=50                         # Width of gdbar
 
 SLEEP=1
 
-ICONPATH='/path/to/icons/' 	    # Path to dzen icons
-BCOLOR='#990000'		        # Icon color
+ICONPATH='/path/to/icons/'      # Path to dzen icons
+BCOLOR='#990000'                # Icon color
 
 MAXPOS="100"
 

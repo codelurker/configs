@@ -8,11 +8,11 @@
 
 #   SETTINGS
 #------------------------------------------------------------------------------
-DIR='/usr/bin/'			        # Path to dzen
-BARBG='#616161'			        # bg color gdbar
-BARFG='#990000'			        # fg color gdbar
-BARH=8					        # Height of gdbar
-BARW=50					        # Width of gdbar
+DIR='/usr/bin/'                 # Path to dzen
+BARBG='#616161'                 # bg color gdbar
+BARFG='#990000'                 # fg color gdbar
+BARH=8                          # Height of gdbar
+BARW=50                         # Width of gdbar
 
 SLEEP=20
 

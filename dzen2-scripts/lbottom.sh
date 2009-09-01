@@ -49,7 +49,6 @@ mpdtitle() {
     echo "^fg(#616161)Now Playing: ^fg(#C4C4C4)`mpc | sed -n '1p' | awk '{if ($1 != "volume:") print}'`" | tr '\n' ' '
 }
 
-
 mpdplay() {
     # I guess there are more elegant ways of doing this, but it works.
     toggle=`mpc | awk {'print $1'} | sed -n '2p' | sed -e 's/\[//g;s/\]//g'`
@@ -64,7 +63,6 @@ mpdplay() {
         print "^fg(#616161)^i(${ICONPATH}/sm4tik/stop.xbm)"
     fi
 }
-
 
 
 # OUTPUT FORMAT

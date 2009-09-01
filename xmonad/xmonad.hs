@@ -6,6 +6,8 @@
 -- Icon Pack: sm4tik
 -- Last Updated: 01.09.2009
 --
+-- Changes: Code cleanup
+--
 
 
 -- Imports --------------------------------------------------------------------
@@ -79,10 +81,10 @@ main = do
 -- Managehook
 manageHook' :: ManageHook
 manageHook' = composeAll . concat $
-    [ [className =? c --> doFloat			                | c <- myFloats]
-    , [title     =? t --> doFloat			                | t <- myOtherFloats]
+    [ [className =? c --> doFloat                           | c <- myFloats]
+    , [title     =? t --> doFloat                           | t <- myOtherFloats]
     , [title     =? t --> doIgnore                          | t <- myIgnores]
-    , [className =? c --> doF (W.shift (workspaces' !! 1))	| c <- webApps]
+    , [className =? c --> doF (W.shift (workspaces' !! 1))  | c <- webApps]
     , [className =? c --> doF (W.shift (workspaces' !! 4))  | c <- graApps]
     , [className =? c --> doF (W.shift (workspaces' !! 3))  | c <- docApps]
     ]

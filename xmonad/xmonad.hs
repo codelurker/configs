@@ -3,7 +3,7 @@
 -- XMonad Settings (xmonad.hs)
 --
 -- XMonad Version: 0.8.1
--- Icon Pack: sm4tik
+-- Icon Pack: sm4tik (http://koti.24.fi/sm4tik/shared/xbm8x8-0.1.tar.gz)
 -- Last Updated: 01.09.2009
 --
 -- Changes: Code cleanup

@@ -1,8 +1,12 @@
 #!/bin/zsh
 # vim:ft=zsh ts=4
-#------------------------------------------------------------------------------
+#==============================================================================
 #   DZEN BAR CONFIGURATION
 #   Filename: rbottom.sh
+#==============================================================================
+#------------------------------------------------------------------------------
+#   Last updated: September 1 - 2009
+#   Changelog: Nothing much, just cleaning up the script.
 #------------------------------------------------------------------------------
 
 
@@ -22,9 +26,6 @@ BCOLOR='#990000'                # Icon color
 MAILDIR='/path/to/maildir'      # Path to Maildir to check for new mail
 
 DZMAIL="urxvt -T mailbox -e mutt"
-
-typeset -A disks
-DISKS=(root / home /home usr /usr)
 
 
 # MY FUNCTIONS

@@ -72,4 +72,4 @@ while true; do
     print -n "  ^fg($BCOLOR)^i(${ICONPATH}/sm4tik/shroom.xbm)  ^fg(#616161)$(version)   ^fg($BCOLOR)^i(${ICONPATH}/sm4tik/note.xbm) ^fg(#616161) MPD: ^fg(#616161)^ca(1, ${MPDP})^i(${ICONPATH}/sm4tik/prev.xbm)^ca() ^fg($BCOLOR)^ca(1, ${MPDPLAY})$(mpdplay)^ca() ^fg(#616161)^ca(1, ${MPDRW})^i(${ICONPATH}/sm4tik/rwd.xbm)^ca() ^ca(1, ${MPDFW})^i(${ICONPATH}/sm4tik/fwd.xbm)^ca() ^ca(1, ${MPDN})^i(${ICONPATH}/sm4tik/next.xbm)^ca()  $(mpd)  $(mpdtitle) \n"
 
     sleep $SLEEP
-done | $DIR/dzen2 -h 16 -w 900 -y 1034 -ta l -fn '-*-liberation mono-*-r-*-*-10-*-*-*-*-*-*-*' -e ''
+done | $DIR/dzen2 -h 20 -w 900 -y 1034 -ta l -fn '-*-liberation mono-*-r-*-*-10-*-*-*-*-*-*-*' -e ''

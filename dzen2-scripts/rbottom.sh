@@ -51,4 +51,4 @@ while true; do
     print -n " ^fg(#616161)$(xmonadver) ^fg(#C4C4C4)- As above so below   ^fg($BCOLOR)^ca(1, ${DZMAIL})^i(${ICONPATH}/sm4tik/mail.xbm)   ^fg(#F7D981)${$(smail):-"^fg(#616161)0 "} ^ca()\n"
 
     sleep $SLEEP
-done | $DIR/dzen2 -h 16 -x 900 -y 1034 -ta r -fn '-*-liberation mono-*-r-*-*-10-*-*-*-*-*-*-*' -e ''
+done | $DIR/dzen2 -h 20 -x 900 -y 1034 -ta r -fn '-*-liberation mono-*-r-*-*-10-*-*-*-*-*-*-*' -e ''

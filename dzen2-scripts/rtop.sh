@@ -13,11 +13,11 @@
 
 #   SETTINGS
 #------------------------------------------------------------------------------
-DIR='/usr/bin/'			        # Path to dzen
-BARBG='#616161'					# bg color gdbar
-BARFG='#990000'					# fg color gdbar
-BARH=8							# Height of gdbar
-BARW=50							# Width of gdbar
+DIR='/usr/bin/'                 # Path to dzen
+BARBG='#616161'                 # bg color gdbar
+BARFG='#990000'                 # fg color gdbar
+BARH=8                          # Height of gdbar
+BARW=50                         # Width of gdbar
 
 SLEEP=1
 
@@ -98,4 +98,4 @@ while true; do
 	RXB=$RXBN; TXB=$TXBN
 
     sleep $SLEEP
-done | $DIR/dzen2 -h 16 -x 1000 -ta r -fn '-*-liberation mono-*-r-*-*-10-*-*-*-*-*-*-*' -e ''
+done | $DIR/dzen2 -h 20 -x 1000 -ta r -fn '-*-liberation mono-*-r-*-*-10-*-*-*-*-*-*-*' -e ''

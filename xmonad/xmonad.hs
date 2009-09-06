@@ -109,14 +109,14 @@ layoutHook' = customLayout
 -- Looks ----------------------------------------------------------------------
 
 -- dzen2 settings --
-myStatusBar = "/usr/bin/dzen2 -ta l -h 16 -w 1000 -fn '-*-liberation mono-*-r-*-*-10-*-*-*-*-*-*-*' -e '' "
+myStatusBar = "/usr/bin/dzen2 -ta l -h 20 -w 1000 -fn '-*-liberation mono-*-r-*-*-10-*-*-*-*-*-*-*' -e '' "
 
 -- XMonad dzen2 bar
 customPP :: PP
 customPP = defaultPP { ppCurrent = dzenColor "#B8BCB8" "#990000" . pad
                      , ppHidden = dzenColor "#B8BCB8" "#484C48" . pad
                      , ppTitle = dzenColor "#C4C4C4" "" . shorten 120
-                     , ppLayout = dzenColor "#C20000" "" .
+                     , ppLayout = dzenColor "#990000" "" .
                         (\ x -> fill (case x of
                             "ResizableTall"             -> icon "tall.xbm"
                             "Mirror ResizableTall"      -> icon "mtall.xbm"
@@ -150,12 +150,12 @@ myXPConfig = defaultXPConfig   { bgColor = "#101010"
 
 
 -- TabConfig
-myTabConfig = defaultTheme { inactiveBorderColor = "#000000"
-			               , activeBorderColor = "#000000"
+myTabConfig = defaultTheme { inactiveBorderColor = "#303030"
+			               , activeBorderColor = "#303030"
                            , activeColor = "#990000"
-                           , inactiveColor = "#000000"
+                           , inactiveColor = "#990000"
                            , activeTextColor = "#FFFFFF"
-                           , inactiveTextColor = "#616161"
+                           , inactiveTextColor = "#C4C4C4"
 			               , decoHeight = 16
                            }
 
@@ -170,7 +170,14 @@ focusedBorderColor' = "#990000"
 
 -- Workspaces
 workspaces' :: [WorkspaceId]
-workspaces' = clickable $ ["1:screen", "2:web", "3:dev", "4:lib", "5:gfx", "6:backtrack", "8: log" ]
+workspaces' = clickable $ ["^i(/home/myrkiada/.xmonad/icons/sm4tik/screen.xbm)", -- 0
+                           "^i(/home/myrkiada/.xmonad/icons/sm4tik/fox.xbm):web", -- 1
+                           "^i(/home/myrkiada/.xmonad/icons/sm4tik/dev.xbm):dev", -- 2
+                           "^i(/home/myrkiada/.xmonad/icons/sm4tik/book.xbm):lib", -- 3
+                           "^i(/home/myrkiada/.xmonad/icons/sm4tik/mouse_01.xbm):gfx", -- 4
+                           "^i(/home/myrkiada/.xmonad/icons/sm4tik/cpu.xbm):vm", -- 5
+                           "^i(/home/myrkiada/.xmonad/icons/sm4tik/info_03.xbm):sys" --6
+                          ]
 
               where clickable l = [ "^ca(1,xdotool key super+" ++ show (n) ++ ")" ++ ws ++ "^ca()" |
                                     (i,ws) <- zip [1..] l,
@@ -220,6 +227,8 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask,               xK_F2    ), spawn "claws-mail")
     , ((modMask,               xK_F4    ), spawn "thunar")
     , ((modMask,               xK_F12   ), spawn "gnome-calculator")
+    , ((modMask,               xK_F3    ), spawn (terminal'++" -e htop"))
+    , ((modMask,               xK_F9    ), spawn "scrot")
 
     -- layouts
     , ((modMask,               xK_space ), sendMessage NextLayout)
@@ -261,7 +270,6 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask .|. shiftMask, xK_l     ), sendMessage MirrorExpand)
     , ((modMask,               xK_f     ), sendMessage ToggleStruts >> sendMessage ToggleLayout)
 
-
     -- volume management
     , ((modMask,               xK_KP_Add       ), spawn "amixer set PCM 1+")
     , ((modMask,               xK_KP_Subtract  ), spawn "amixer set PCM 1-")
@@ -273,11 +281,9 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask,	           xK_KP_Insert    ), spawn "mpc toggle")
     , ((modMask,	           xK_KP_Delete    ), spawn "mpc stop")
 
-    -- Mousegestures
-
     -- prompts
     , ((modMask,  xK_p     ), shellPrompt myXPConfig)
-    , ((modMask,  xK_n	   ), appendFilePrompt myXPConfig "/home/myrkiada/NOTES")
+--    , ((modMask,  xK_n	   ), appendFilePrompt myXPConfig "/home/myrkiada/NOTES")
     , ((modMask,  xK_m     ), layoutPrompt myXPConfig)
 
     -- GridSelect

@@ -8,7 +8,8 @@
 --
 -- Changes: Code cleanup, Added icons to workspaces, Added placeHook,
 --          Added "dzenDontStripMyIcons" to make UrgencyHook play along
---          with dzen's icons.
+--          with dzen's icons, and fix issue with urgent workspace not
+--          being clickable.
 --
 
 
@@ -148,15 +149,18 @@ customPP = defaultPP { ppCurrent = dzenColor "#B8BCB8" "#990000" . pad
                      fill h i ="^p(" ++ show i ++ ")" ++ h ++ "^p(" ++ show i ++")"
 
 
--- Use this instead of dzenStrip for icons to work with urgencyhook
+-- Use this instead of dzenStrip for icons to work with urgencyhook, also makes urgent workspace clickable
+dzenDontStripMyIcons :: String -> String
 dzenDontStripMyIcons = strip [] where
     strip keep x
-      | null x               = keep
-      | "^^"  `isPrefixOf` x = strip (keep ++ "^") (drop 2 x)
-      | "^i" `isPrefixOf` x = strip (keep ++"^") (drop 1 x)
-      | '^' == head x       = strip keep (drop 1 . dropWhile (/= ')') $ x)
-      | otherwise            = let (good,x') = span (/= '^') x
-                               in strip (keep ++ good) x'
+      | null x                  = keep
+      | "^^"  `isPrefixOf`    x = strip (keep ++ "^") (drop 2 x)
+      | "^i" `isPrefixOf`     x = strip (keep ++"^") (drop 1 x)
+      | "^ca" `isPrefixOf`    x = strip (keep ++"^") (drop 1 x)
+      | '^' == head x           = strip keep (drop 1 . dropWhile (/= ')') $ x)
+      | otherwise               = let (good,x') = span (/= '^') x
+                                        in strip (keep ++ good) x'
+
 
 -- XPConfig
 myXPConfig = defaultXPConfig   { bgColor = "#101010"

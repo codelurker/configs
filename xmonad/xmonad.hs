@@ -154,7 +154,6 @@ dzenDontStripMyIcons :: String -> String
 dzenDontStripMyIcons = strip [] where
     strip keep x
       | null x                  = keep
-      | "^^"  `isPrefixOf`    x = strip (keep ++ "^") (drop 2 x)
       | "^i" `isPrefixOf`     x = strip (keep ++"^") (drop 1 x)
       | "^ca" `isPrefixOf`    x = strip (keep ++"^") (drop 1 x)
       | '^' == head x           = strip keep (drop 1 . dropWhile (/= ')') $ x)
@@ -304,13 +303,13 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- volume management
     , ((modMask,               xK_KP_Add       ), spawn "amixer set PCM 1+")
     , ((modMask,               xK_KP_Subtract  ), spawn "amixer set PCM 1-")
-    , ((modMask,	           xK_KP_Multiply  ), spawn "amixer set PCM toggle")
+    , ((modMask,               xK_KP_Multiply  ), spawn "amixer set PCM toggle")
 
     -- moc controls
-    , ((modMask,	           xK_KP_Right     ), spawn "mpc next")
+    , ((modMask,               xK_KP_Right     ), spawn "mpc next")
     , ((modMask,               xK_KP_Left      ), spawn "mpc prev")
-    , ((modMask,	           xK_KP_Insert    ), spawn "mpc toggle")
-    , ((modMask,	           xK_KP_Delete    ), spawn "mpc stop")
+    , ((modMask,               xK_KP_Insert    ), spawn "mpc toggle")
+    , ((modMask,               xK_KP_Delete    ), spawn "mpc stop")
 
     -- prompts
     , ((modMask,  xK_p                  ), shellPrompt myXPConfig)

@@ -6,7 +6,9 @@
 -- Icon Pack: sm4tik (http://koti.24.fi/sm4tik/shared/xbm8x8-0.1.tar.gz)
 -- Last Updated: 01.09.2009
 --
--- Changes: Code cleanup
+-- Changes: Code cleanup, Added icons to workspaces, Added placeHook,
+--          Added "dzenDontStripMyIcons" to make UrgencyHook play along
+--          with dzen's icons.
 --
 
 
@@ -20,12 +22,11 @@ import System.Exit
 import Graphics.X11.Xlib
 import IO (Handle, hPutStrLn)
 import XMonad.Actions.CycleWS (nextScreen,prevScreen)
+import Data.List
 
 -- Prompts
 import XMonad.Prompt
 import XMonad.Prompt.Shell
-import XMonad.Prompt.AppendFile
-import XMonad.Prompt.Layout
 
 -- Actions
 import XMonad.Actions.MouseGestures
@@ -57,6 +58,8 @@ import XMonad.Layout.Reflect
 import XMonad.Layout.DwmStyle
 import Data.Ratio ((%))
 import XMonad.Layout.ToggleLayouts
+import XMonad.Layout.Spacing
+
 
 
 -- Main -----------------------------------------------------------------------
@@ -73,7 +76,7 @@ main = do
               , keys = keys'
               , logHook = logHook' h
               , layoutHook = layoutHook'
-              , manageHook = placeHook myPlacement <+> manageHook defaultConfig <+> manageHook'
+              , manageHook = manageHook defaultConfig <+> manageHook'
               }
 
 -- Hooks ----------------------------------------------------------------------
@@ -81,27 +84,33 @@ main = do
 -- Managehook
 manageHook' :: ManageHook
 manageHook' = composeAll . concat $
-    [ [className =? c --> doFloat                           | c <- myFloats]
-    , [title     =? t --> doFloat                           | t <- myOtherFloats]
-    , [title     =? t --> doIgnore                          | t <- myIgnores]
-    , [className =? c --> doF (W.shift (workspaces' !! 1))  | c <- webApps]
-    , [className =? c --> doF (W.shift (workspaces' !! 4))  | c <- graApps]
-    , [className =? c --> doF (W.shift (workspaces' !! 3))  | c <- docApps]
+    [ [className =? c --> doFloat                                 | c <- myFloats]
+    , [title     =? t --> doFloat                                 | t <- myOtherFloats]
+    , [title     =? t --> doIgnore                                | t <- myIgnores]
+    , [className =? c --> doF (W.shift (workspaces' !! 1))        | c <- webApps]
+    , [className =? c --> doF (W.shift (workspaces' !! 4))        | c <- graApps]
+    , [className =? c --> doF (W.shift (workspaces' !! 3))        | c <- docApps]
+    , [title     =? t --> (placeHook muttPlacement <+> doFloat)   | t <- placeMutt]
+    , [title     =? t --> (placeHook calPlacement <+> doFloat)    | t <- placeCal]
     ]
     where
     myFloats       = ["feh", "file-roller", "File-roller", "MPlayer", "Gnome-calculator"]
-    myOtherFloats  = ["alsamixer", "file-roller", "Gran Paradiso Preferences", "mailbox", "New Layer", "Color Balance", "Hue-Saturation" ]
+    myOtherFloats  = ["alsamixer", "file-roller", "Gran Paradiso Preferences", "New Layer", "Color Balance", "Hue-Saturation" ]
     myIgnores      = [""]
     webApps        = ["Gran Paradiso", "Opera", "Navigator", "Shiretoko"]
     graApps        = ["gimp-2.6", "Gimp-2.6", "GIMP", "gimp"]
     docApps        = ["evince", "Evince", "Apvlv"]
+    placeMutt      = ["mailbox"]
+    placeCal       = ["cc-calendar"]
 
--- Placehook
-myPlacement = smart (0.5,0.5)
+-- Placehook for mutt and calcurse (executed from dzen bar)
+muttPlacement = withGaps (0,0,20,0) (fixed (1,1))
+calPlacement  = withGaps (20,0,0,0) (fixed (1,0))
 
 -- Loghook
 logHook' :: Handle ->  X ()
 logHook' h = dynamicLogWithPP $ customPP { ppOutput = hPutStrLn h }
+
 
 -- Layouthook
 layoutHook' = customLayout
@@ -118,22 +127,36 @@ customPP = defaultPP { ppCurrent = dzenColor "#B8BCB8" "#990000" . pad
                      , ppTitle = dzenColor "#C4C4C4" "" . shorten 120
                      , ppLayout = dzenColor "#990000" "" .
                         (\ x -> fill (case x of
-                            "ResizableTall"             -> icon "tall.xbm"
-                            "Mirror ResizableTall"      -> icon "mtall.xbm"
-                            "Full"                      -> icon "full.xbm"
-                            "IM Grid"                   -> icon "mail.xbm"
-                            "IM ReflectX IM Full"       -> icon "scorpio.xbm"
-                            "TabBar Tall"               -> icon "info_01.xbm"
-                            "Tabbed Bottom Simplest"    -> icon "info_02.xbm"
-                            _                           -> pad x) 4)
+                            "ResizableTall"                         -> icon "tall.xbm"
+                            "Mirror ResizableTall"                  -> icon "mtall.xbm"
+                            "Full"                                  -> icon "full.xbm"
+                            "IM Grid"                               -> icon "mail.xbm"
+                            "IM ReflectX IM Full"                   -> icon "scorpio.xbm"
+                            "TabBar Tall"                           -> icon "info_01.xbm"
+                            "Tabbed Bottom Simplest"                -> icon "info_02.xbm"
+                            "ReflectX IM Tabbed Bottom Simplest"    -> icon "scorpio.xbm"
+                            "ReflectX IM Mirror ResizableTall"      -> icon "info_01.xbm"
+                            "DefaultDecoration Tall"                -> icon "info_02.xbm"
+                            _                                       -> pad x) 4)
                      , ppWsSep = ""
                      , ppHiddenNoWindows = dzenColor "#616161" "" . pad
-                     , ppUrgent = dzenColor "#616161" "#D4D455" . dzenStrip
+                     , ppUrgent = dzenColor "#616161" "#D4D455" . dzenDontStripMyIcons
                      }
                      where
                      icon h = "^i(/home/myrkiada/.xmonad/icons/" ++ h ++ ")"
                      fill :: String -> Int -> String
                      fill h i ="^p(" ++ show i ++ ")" ++ h ++ "^p(" ++ show i ++")"
+
+
+-- Use this instead of dzenStrip for icons to work with urgencyhook
+dzenDontStripMyIcons = strip [] where
+    strip keep x
+      | null x               = keep
+      | "^^"  `isPrefixOf` x = strip (keep ++ "^") (drop 2 x)
+      | "^i" `isPrefixOf` x = strip (keep ++"^") (drop 1 x)
+      | '^' == head x       = strip keep (drop 1 . dropWhile (/= ')') $ x)
+      | otherwise            = let (good,x') = span (/= '^') x
+                               in strip (keep ++ good) x'
 
 -- XPConfig
 myXPConfig = defaultXPConfig   { bgColor = "#101010"
@@ -159,6 +182,11 @@ myTabConfig = defaultTheme { inactiveBorderColor = "#303030"
 			               , decoHeight = 16
                            }
 
+-- Grid Select Config
+myGSConfig = defaultGSConfig { gs_cellheight = 30
+                             , gs_cellwidth = 100
+                             , gs_cellpadding = 0
+                             }  
 
 -- Borders
 borderWidth' :: Dimension
@@ -190,21 +218,20 @@ workspaces' = clickable $ ["^i(/home/myrkiada/.xmonad/icons/sm4tik/screen.xbm)",
 customLayout = avoidStruts . smartBorders. toggleLayouts Full $
 
     -- Layout for Workspaces
-    onWorkspace (workspaces' !! 0) (tiled ||| (Mirror tiled) ||| Full ||| tallDefault shrinkText myTabConfig) $
     onWorkspace (workspaces' !! 4) (gimp ||| gimpg) $
-    onWorkspace (workspaces' !! 6) ((Mirror tiled) ||| tiled) $
 
     -- Default layout
-    tiled ||| (Mirror tiled)  ||| tallDefault shrinkText myTabConfig ||| tabbedBottomAlways shrinkText myTabConfig
+    tiled ||| spaced ||| (Mirror tiled) ||| tallDefault shrinkText myTabConfig ||| Full
 
   where
-    tiled  = ResizableTall 1 (2/100) (1/2) []
-    mirror = (Mirror tiled)
-    gimpw  = tabbedBottomAlways shrinkText myTabConfig
-    gimpg  = reflectHoriz $
-             withIM (0.18) (Role "gimp-toolbox") mirror
-    gimp   = reflectHoriz $
-             withIM (0.18) (Role "gimp-toolbox") gimpw
+    tiled   = ResizableTall 1 (2/100) (1/2) []
+    gimpTab = tabbedBottomAlways shrinkText myTabConfig
+    gimpg   = reflectHoriz $
+              withIM (0.18) (Role "gimp-toolbox") (Mirror tiled)
+    gimp    = reflectHoriz $
+              withIM (0.18) (Role "gimp-toolbox") gimpTab
+    spaced  = spacing 2 $ ResizableTall 1 (3/100) (1/2) []
+
 
 -------------------------------------------------------------------------------
 -- Terminal --
@@ -282,12 +309,10 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask,	           xK_KP_Delete    ), spawn "mpc stop")
 
     -- prompts
-    , ((modMask,  xK_p     ), shellPrompt myXPConfig)
---    , ((modMask,  xK_n	   ), appendFilePrompt myXPConfig "/home/myrkiada/NOTES")
-    , ((modMask,  xK_m     ), layoutPrompt myXPConfig)
+    , ((modMask,  xK_p                  ), shellPrompt myXPConfig)
 
     -- GridSelect
-    , ((modMask,  xK_g     ), goToSelected defaultGSConfig)
+    , ((modMask,  xK_g                  ), goToSelected myGSConfig)
 
     -- lock, quit, or restart
     , ((modMask .|. shiftMask, xK_x     ), spawn "xlock")
